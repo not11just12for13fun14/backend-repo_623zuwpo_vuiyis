@@ -1,48 +1,45 @@
 """
-Database Schemas
+Database Schemas for the Legal Document Generator
 
-Define your MongoDB collection schemas here using Pydantic models.
-These schemas are used for data validation in your application.
-
-Each Pydantic model represents a collection in your database.
-Model name is converted to lowercase for the collection name:
-- User -> "user" collection
-- Product -> "product" collection
-- BlogPost -> "blogs" collection
+Each Pydantic model represents a MongoDB collection. The collection name is the
+lowercase of the class name (e.g., LegalTemplate -> "legaltemplate").
 """
 
+from typing import List, Optional, Literal, Dict, Any
 from pydantic import BaseModel, Field
-from typing import Optional
 
-# Example schemas (replace with your own):
 
-class User(BaseModel):
-    """
-    Users collection schema
-    Collection name: "user" (lowercase of class name)
-    """
-    name: str = Field(..., description="Full name")
-    email: str = Field(..., description="Email address")
-    address: str = Field(..., description="Address")
-    age: Optional[int] = Field(None, ge=0, le=120, description="Age in years")
-    is_active: bool = Field(True, description="Whether user is active")
+class QuestionOption(BaseModel):
+    label: str
+    value: str
 
-class Product(BaseModel):
-    """
-    Products collection schema
-    Collection name: "product" (lowercase of class name)
-    """
-    title: str = Field(..., description="Product title")
-    description: Optional[str] = Field(None, description="Product description")
-    price: float = Field(..., ge=0, description="Price in dollars")
-    category: str = Field(..., description="Product category")
-    in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+class Question(BaseModel):
+    key: str = Field(..., description="Unique key used in the template placeholders, e.g., {{full_name}} -> key='full_name'")
+    label: str = Field(..., description="Question label shown to the user")
+    help: Optional[str] = Field(None, description="Helper text to guide the user")
+    type: Literal["text", "textarea", "number", "date", "select", "multiselect", "email", "phone"] = "text"
+    required: bool = True
+    placeholder: Optional[str] = None
+    options: Optional[List[QuestionOption]] = None
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+
+class LegalTemplate(BaseModel):
+    key: str = Field(..., description="Stable identifier for the template, e.g., 'affidavit_of_loss'")
+    title: str = Field(..., description="Human-friendly title")
+    description: Optional[str] = None
+    category: str = Field("General", description="Template category")
+    jurisdiction: str = Field("Republic of the Philippines", description="Jurisdiction footer/header text")
+    requires_notarization: bool = Field(True, description="Whether the document typically requires notarization")
+    questions: List[Question]
+    content: str = Field(..., description="Template body with {{placeholders}} to be replaced by answers")
+    acknowledgement: Optional[str] = Field(None, description="Optional notarial acknowledgement section with placeholders")
+
+
+class GeneratedDocument(BaseModel):
+    template_key: str
+    answers: Dict[str, Any]
+    rendered_text: str
+    rendered_html: Optional[str] = None
+    title: str
+
