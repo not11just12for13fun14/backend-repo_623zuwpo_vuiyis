@@ -139,7 +139,239 @@ DEFAULT_TEMPLATES: List[LegalTemplate] = [
         requires_notarization=True,
         jurisdiction="Republic of the Philippines",
     ),
+
+    # 1) Special Power of Attorney (SPA)
+    LegalTemplate(
+        key="special_power_of_attorney",
+        title="Special Power of Attorney",
+        category="Affidavits / SPA",
+        description="Authorizes an Attorney-in-Fact to act on specific matters.",
+        questions=[
+            {"key": "principal_name", "label": "Principal's Full Name", "type": "text"},
+            {"key": "principal_civil_status", "label": "Principal Civil Status", "type": "select", "options": [
+                {"label": "Single", "value": "Single"},
+                {"label": "Married", "value": "Married"},
+                {"label": "Widowed", "value": "Widowed"},
+                {"label": "Separated", "value": "Separated"}
+            ]},
+            {"key": "principal_citizenship", "label": "Principal Citizenship", "type": "text", "placeholder": "Filipino"},
+            {"key": "principal_address", "label": "Principal Address", "type": "textarea"},
+            {"key": "agent_name", "label": "Attorney-in-Fact Full Name", "type": "text"},
+            {"key": "agent_address", "label": "Attorney-in-Fact Address", "type": "textarea"},
+            {"key": "powers", "label": "Specific Powers Granted", "type": "textarea", "placeholder": "e.g., to sell/manage a property, sign documents, receive payments"},
+            {"key": "validity", "label": "Validity/Limitations", "type": "textarea", "placeholder": "e.g., valid for six (6) months from date of execution"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "SPECIAL POWER OF ATTORNEY\n\n"
+            "KNOW ALL MEN BY THESE PRESENTS:\n\n"
+            "I, {{principal_name}}, of legal age, {{principal_civil_status}}, {{principal_citizenship}}, and a resident of {{principal_address}}, do hereby NAME, CONSTITUTE and APPOINT {{agent_name}}, of legal age, and a resident of {{agent_address}}, as my true and lawful ATTORNEY-IN-FACT, to do and perform the following acts and deeds in my name, place and stead:\n\n"
+            "{{powers}}\n\n"
+            "This authority shall be {{validity}}.\n\n"
+            "IN WITNESS WHEREOF, I have hereunto set my hand this {{date}} at {{city}}, Philippines.\n\n"
+            "Principal: {{principal_name}}\n"
+            "Attorney-in-Fact: {{agent_name}}\n"
+        ),
+        acknowledgement=(
+            "BEFORE ME, a Notary Public for and in {{city}}, this {{date}}, personally appeared {{principal_name}} who is known to me and who acknowledged to me that the foregoing instrument is his/her free act and deed.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
+
+    # 2) Affidavit of Support and Consent
+    LegalTemplate(
+        key="affidavit_of_support_and_consent",
+        title="Affidavit of Support and Consent",
+        category="Affidavits",
+        description="Affiant undertakes financial support and gives consent (often for minors/passport/travel).",
+        questions=[
+            {"key": "affiant_name", "label": "Affiant Full Name", "type": "text"},
+            {"key": "affiant_civil_status", "label": "Civil Status", "type": "select", "options": [
+                {"label": "Single", "value": "Single"},
+                {"label": "Married", "value": "Married"},
+                {"label": "Widowed", "value": "Widowed"},
+                {"label": "Separated", "value": "Separated"}
+            ]},
+            {"key": "affiant_citizenship", "label": "Citizenship", "type": "text", "placeholder": "Filipino"},
+            {"key": "affiant_address", "label": "Address", "type": "textarea"},
+            {"key": "beneficiary_name", "label": "Beneficiary/Minor Name", "type": "text"},
+            {"key": "relationship", "label": "Relationship to Beneficiary", "type": "text", "placeholder": "Parent/Guardian"},
+            {"key": "purpose", "label": "Purpose of Support/Consent", "type": "textarea", "placeholder": "e.g., travel, passport application, schooling"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "AFFIDAVIT OF SUPPORT AND CONSENT\n\n"
+            "I, {{affiant_name}}, of legal age, {{affiant_civil_status}}, {{affiant_citizenship}}, and a resident of {{affiant_address}}, after having been duly sworn in accordance with law, depose and state that:\n\n"
+            "1. That I am the {{relationship}} of {{beneficiary_name}};\n"
+            "2. That I hereby undertake to provide financial support as may be necessary;\n"
+            "3. That I likewise give my full consent for the purpose of {{purpose}};\n"
+            "4. That I am executing this affidavit to attest to the truth of the foregoing.\n\n"
+            "IN WITNESS WHEREOF, I have hereunto set my hand this {{date}} in {{city}}, Philippines.\n\n"
+            "Affiant: {{affiant_name}}\n"
+        ),
+        acknowledgement=(
+            "SUBSCRIBED AND SWORN to before me this {{date}} in {{city}}, Philippines, affiant exhibited to me competent evidence of identity.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
+
+    # 3) Affidavit of Discrepancy
+    LegalTemplate(
+        key="affidavit_of_discrepancy",
+        title="Affidavit of Discrepancy",
+        category="Affidavits",
+        description="Explains discrepancies in names or entries across records.",
+        questions=[
+            {"key": "affiant_name", "label": "Affiant Full Name", "type": "text"},
+            {"key": "civil_status", "label": "Civil Status", "type": "select", "options": [
+                {"label": "Single", "value": "Single"},
+                {"label": "Married", "value": "Married"},
+                {"label": "Widowed", "value": "Widowed"},
+                {"label": "Separated", "value": "Separated"}
+            ]},
+            {"key": "citizenship", "label": "Citizenship", "type": "text", "placeholder": "Filipino"},
+            {"key": "address", "label": "Address", "type": "textarea"},
+            {"key": "correct_entry", "label": "Correct Entry (Name/Date/etc.)", "type": "text"},
+            {"key": "erroneous_entry", "label": "Erroneous Entry as Appearing", "type": "text"},
+            {"key": "record_type", "label": "Record Type", "type": "text", "placeholder": "e.g., Birth Certificate"},
+            {"key": "agency", "label": "Issuing Agency/Office", "type": "text", "placeholder": "e.g., PSA"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "AFFIDAVIT OF DISCREPANCY\n\n"
+            "I, {{affiant_name}}, of legal age, {{civil_status}}, {{citizenship}}, and a resident of {{address}}, after being duly sworn in accordance with law, depose and state:\n\n"
+            "1. That there exists a discrepancy in my {{record_type}} issued by {{agency}};\n"
+            "2. That the correct entry should be: {{correct_entry}}, but it appears as: {{erroneous_entry}};\n"
+            "3. That this affidavit is executed to explain and rectify said discrepancy.\n\n"
+            "IN WITNESS WHEREOF, I have hereunto set my hand this {{date}} at {{city}}, Philippines.\n\n"
+            "Affiant: {{affiant_name}}\n"
+        ),
+        acknowledgement=(
+            "SUBSCRIBED AND SWORN to before me this {{date}} in {{city}}, Philippines, affiant exhibited competent evidence of identity.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
+
+    # 4) Promissory Note
+    LegalTemplate(
+        key="promissory_note",
+        title="Promissory Note",
+        category="Contracts",
+        description="Promise to pay a sum under specified terms.",
+        questions=[
+            {"key": "debtor_name", "label": "Debtor Name", "type": "text"},
+            {"key": "debtor_address", "label": "Debtor Address", "type": "textarea"},
+            {"key": "creditor_name", "label": "Creditor Name", "type": "text"},
+            {"key": "amount", "label": "Principal Amount (PHP)", "type": "number"},
+            {"key": "interest", "label": "Interest Rate (% per annum)", "type": "number", "placeholder": "e.g., 12"},
+            {"key": "due_date", "label": "Due Date", "type": "date"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date of Execution", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "PROMISSORY NOTE\n\n"
+            "For value received, I, {{debtor_name}}, residing at {{debtor_address}}, hereby promise to pay {{creditor_name}} the sum of Philippine Pesos: {{amount}}, with interest at the rate of {{interest}}% per annum, payable on or before {{due_date}}.\n\n"
+            "In case of default, the undersigned agrees to pay attorney's fees and costs as may be allowed by law.\n\n"
+            "IN WITNESS WHEREOF, I have set my hand this {{date}} at {{city}}, Philippines.\n\n"
+            "Debtor: {{debtor_name}}\n"
+        ),
+        acknowledgement=(
+            "ACKNOWLEDGED before me this {{date}} in {{city}}, Philippines by {{debtor_name}}, who is known to me and who executed the foregoing instrument.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
+
+    # 5) Residential Lease Agreement (Simple)
+    LegalTemplate(
+        key="lease_agreement_residential",
+        title="Residential Lease Agreement",
+        category="Contracts",
+        description="Simple lease for residential property.",
+        questions=[
+            {"key": "lessor_name", "label": "Lessor (Landlord) Name", "type": "text"},
+            {"key": "lessor_address", "label": "Lessor Address", "type": "textarea"},
+            {"key": "lessee_name", "label": "Lessee (Tenant) Name", "type": "text"},
+            {"key": "lessee_address", "label": "Lessee Address", "type": "textarea"},
+            {"key": "property_address", "label": "Leased Premises Address", "type": "textarea"},
+            {"key": "term_months", "label": "Lease Term (months)", "type": "number"},
+            {"key": "monthly_rent", "label": "Monthly Rent (PHP)", "type": "number"},
+            {"key": "deposit", "label": "Security Deposit (PHP)", "type": "number"},
+            {"key": "advance", "label": "Advance Rent (PHP)", "type": "number"},
+            {"key": "start_date", "label": "Start Date", "type": "date"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "RESIDENTIAL LEASE AGREEMENT\n\n"
+            "This Lease Agreement is made this {{date}} in {{city}}, Philippines, by and between {{lessor_name}} (LESSOR), residing at {{lessor_address}}, and {{lessee_name}} (LESSEE), residing at {{lessee_address}}.\n\n"
+            "1. Premises: {{property_address}}\n"
+            "2. Term: {{term_months}} months commencing on {{start_date}}\n"
+            "3. Rent: PHP {{monthly_rent}} per month, payable in advance every first day of the month\n"
+            "4. Deposits: Security Deposit PHP {{deposit}}; Advance Rent PHP {{advance}}\n"
+            "5. Utilities and maintenance for the account of the LESSEE unless otherwise agreed.\n\n"
+            "IN WITNESS WHEREOF, the parties have hereunto set their hands on the date and place first above written.\n\n"
+            "LESSOR: {{lessor_name}}\n"
+            "LESSEE: {{lessee_name}}\n"
+        ),
+        acknowledgement=(
+            "BEFORE ME, a Notary Public for and in {{city}}, this {{date}}, personally appeared {{lessor_name}} and {{lessee_name}} who acknowledged to me that the foregoing instrument is their free act and deed.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
+
+    # 6) Parental Consent for a Minor to Travel
+    LegalTemplate(
+        key="consent_to_travel_minor",
+        title="Parental Consent for Minor to Travel",
+        category="Affidavits",
+        description="Allows a minor child to travel with consent of parent/guardian.",
+        questions=[
+            {"key": "parent_name", "label": "Parent/Guardian Name", "type": "text"},
+            {"key": "parent_address", "label": "Parent Address", "type": "textarea"},
+            {"key": "minor_name", "label": "Minor's Full Name", "type": "text"},
+            {"key": "minor_birthdate", "label": "Minor's Birthdate", "type": "date"},
+            {"key": "companion_name", "label": "Companion/Guardian During Travel", "type": "text"},
+            {"key": "destination", "label": "Destination", "type": "text"},
+            {"key": "travel_dates", "label": "Travel Dates / Duration", "type": "text"},
+            {"key": "purpose", "label": "Purpose of Travel", "type": "textarea"},
+            {"key": "city", "label": "City/Municipality", "type": "text"},
+            {"key": "date", "label": "Date", "type": "date"}
+        ],
+        content=(
+            "Republic of the Philippines\n\n"
+            "PARENTAL CONSENT FOR MINOR TO TRAVEL\n\n"
+            "I, {{parent_name}}, of legal age and residing at {{parent_address}}, hereby give my full consent for my minor child {{minor_name}} (born on {{minor_birthdate}}) to travel to {{destination}} on {{travel_dates}} under the care and supervision of {{companion_name}} for the purpose of {{purpose}}.\n\n"
+            "I assume full responsibility for the foregoing consent.\n\n"
+            "IN WITNESS WHEREOF, I have hereunto set my hand this {{date}} at {{city}}, Philippines.\n\n"
+            "Parent/Guardian: {{parent_name}}\n"
+        ),
+        acknowledgement=(
+            "SUBSCRIBED AND SWORN to before me this {{date}} in {{city}}, Philippines, affiant exhibited competent evidence of identity.\n\n"
+            "Doc. No. ______; Page No. ______; Book No. ______; Series of 20___."
+        ),
+        requires_notarization=True,
+        jurisdiction="Republic of the Philippines",
+    ),
 ]
+
 
 
 def seed_templates_if_empty():
